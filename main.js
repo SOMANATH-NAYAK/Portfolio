@@ -153,7 +153,7 @@ function initHeroParticles() {
 
     const ctx = canvas.getContext('2d');
     let particles = [];
-    let mouse = { x: null, y: null, radius: 150 };
+    let mouse = { x: null, y: null, radius: 180 };
 
     function resizeCanvas() {
         canvas.width = window.innerWidth;
@@ -162,37 +162,48 @@ function initHeroParticles() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-    });
+    // Track mouse coordinates strictly within the hero boundary
+    const heroSection = document.getElementById('home');
+    if (heroSection) {
+        heroSection.addEventListener('mousemove', (e) => {
+            const rect = heroSection.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
 
-    window.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
+        heroSection.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+    }
 
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.vx = (Math.random() - 0.5) * 0.8;
-            this.vy = (Math.random() - 0.5) * 0.8;
-            this.radius = Math.random() * 2 + 1;
-            // High contrast colors
-            const colors = ['#FF2A2A', '#FFD700', '#F8F9FA', '#444444'];
+            // Float upward slowly (anti-gravity)
+            this.vy = -(Math.random() * 0.4 + 0.1); 
+            this.vx = (Math.random() - 0.5) * 0.25; 
+            this.radius = Math.random() * 1.5 + 1.0; // Tiny particles
+            
+            // Core colors: Red (#FF2A2A), Yellow (#FFD700), White (#F8F9FA)
+            const colors = ['#FF2A2A', '#FFD700', '#F8F9FA'];
             this.color = colors[Math.floor(Math.random() * colors.length)];
         }
 
         update() {
-            this.x += this.vx;
             this.y += this.vy;
+            this.x += this.vx;
 
-            // Screen boundary bounce
-            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            // Float upward wrap around logic
+            if (this.y < 0) {
+                this.y = canvas.height;
+                this.x = Math.random() * canvas.width;
+            }
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
 
-            // Mouse repulsion logic
+            // Magnetic repulsion logic from mouse
             if (mouse.x != null && mouse.y != null) {
                 let dx = this.x - mouse.x;
                 let dy = this.y - mouse.y;
@@ -200,8 +211,9 @@ function initHeroParticles() {
                 if (dist < mouse.radius) {
                     let force = (mouse.radius - dist) / mouse.radius;
                     let angle = Math.atan2(dy, dx);
-                    this.x += Math.cos(angle) * force * 4;
-                    this.y += Math.sin(angle) * force * 4;
+                    // Push particles away smoothly
+                    this.x += Math.cos(angle) * force * 5;
+                    this.y += Math.sin(angle) * force * 5;
                 }
             }
         }
@@ -216,7 +228,8 @@ function initHeroParticles() {
 
     function init() {
         particles = [];
-        const count = Math.min(Math.floor(window.innerWidth / 15), 120);
+        // Generate exactly 200 tiny particles
+        const count = 200;
         for (let i = 0; i < count; i++) {
             particles.push(new Particle());
         }
@@ -227,8 +240,8 @@ function initHeroParticles() {
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Draw grid coordinate system lines in background
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.01)';
+        // Draw coordinate grid system lines in background
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.015)';
         ctx.lineWidth = 1;
         const gridGap = 80;
         for (let x = 0; x < canvas.width; x += gridGap) {
@@ -244,7 +257,7 @@ function initHeroParticles() {
             ctx.stroke();
         }
 
-        // Draw node lines
+        // Draw connections between nearby nodes (radius 100)
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 let dx = particles[i].x - particles[j].x;
@@ -252,8 +265,8 @@ function initHeroParticles() {
                 let dist = Math.sqrt(dx * dx + dy * dy);
 
                 if (dist < 100) {
-                    let alpha = (100 - dist) / 100 * 0.07;
-                    ctx.strokeStyle = `rgba(248, 249, 25A, ${alpha})`;
+                    let alpha = ((100 - dist) / 100) * 0.08;
+                    ctx.strokeStyle = `rgba(248, 249, 250, ${alpha})`;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
