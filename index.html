@@ -92,122 +92,50 @@
             </div>
         </section>
 
-        <!-- Logic Section -->
-        <section id="logic" class="logic-section">
+        <!-- Logic & Work Section -->
+        <section id="logic" class="logic-work-section">
             <div class="container section-container">
                 <div class="section-header">
-                    <span class="section-tag">// MODULE_01</span>
-                    <h2 class="section-title">THE LOGIC LAB</h2>
+                    <span class="section-tag">// MODULE_01 &amp; 02 // LOGIC &amp; WORK</span>
+                    <h2 class="section-title">Algorithmic Creations</h2>
                     <p class="section-description">
-                        An interactive implementation of Conway's Game of Life. Simple algorithmic rules generating complex emergent visual states. Draw custom structures or select from architectural templates.
+                        Exhibiting programmatic logic alongside visually premium, interaction-driven product designs.
                     </p>
                 </div>
 
-                <div class="logic-grid">
-                    <!-- Simulation Sandbox Area -->
-                    <div class="simulation-card">
+                <div class="logic-work-grid">
+                    <!-- Left: Sorting Visualizer -->
+                    <div class="visualizer-card">
                         <div class="card-header-bar">
                             <div class="window-dot red-dot"></div>
                             <div class="window-dot yellow-dot"></div>
                             <div class="window-dot green-dot"></div>
-                            <span class="window-title">cellular_automata.sys</span>
+                            <span class="window-title">sorting_algorithm.sys</span>
                         </div>
-                        <div class="canvas-wrapper">
-                            <canvas id="logic-canvas"></canvas>
+                        <div class="visualizer-container">
+                            <div class="bars-container" id="bars-container">
+                                <!-- Generated dynamically by JS -->
+                            </div>
                         </div>
-                        <div class="simulation-controls">
-                            <button id="sim-play-btn" class="ctrl-btn" aria-label="Play/Pause Simulation">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </button>
-                            <button id="sim-step-btn" class="ctrl-btn" title="Step One Generation" aria-label="Step One Generation">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                                </svg>
-                            </button>
-                            <button id="sim-clear-btn" class="ctrl-btn text-btn">Clear</button>
-                            
+                        <div class="visualizer-controls">
+                            <button id="run-visual-btn" class="btn btn-slide-up text-btn">Run Visualization</button>
+                            <button id="reset-visual-btn" class="ctrl-btn text-btn">Randomize</button>
                             <div class="control-group">
-                                <label for="sim-preset-select">Preset</label>
-                                <select id="sim-preset-select" class="ctrl-select">
-                                    <option value="random">Random Noise</option>
-                                    <option value="gosper">Gosper Glider Gun</option>
-                                    <option value="pulsar">The Pulsar (Period 3)</option>
-                                    <option value="glider">Glider Stream</option>
-                                    <option value="pentadecathlon">Pentadecathlon</option>
+                                <label for="algo-select">Algorithm</label>
+                                <select id="algo-select" class="ctrl-select">
+                                    <option value="quicksort">QuickSort</option>
+                                    <option value="mergesort">MergeSort</option>
+                                    <option value="bubblesort">BubbleSort</option>
                                 </select>
                             </div>
-
-                            <div class="control-group slider-group">
-                                <label for="sim-speed-slider">Speed</label>
-                                <input type="range" id="sim-speed-slider" min="1" max="60" value="30" class="ctrl-slider">
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Readout / Dashboard Panel -->
-                    <div class="dashboard-card">
-                        <div class="dashboard-status-header">
-                            <span class="status-indicator-light blinking"></span>
-                            <span class="status-text">SYSTEM ACTIVE</span>
-                        </div>
-                        <div class="stats-panel">
-                            <div class="stat-box">
-                                <div class="stat-label">GENERATION</div>
-                                <div class="stat-value" id="stat-generation">0</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">ACTIVE CELLS</div>
-                                <div class="stat-value" id="stat-cells">0</div>
-                            </div>
-                            <div class="stat-box">
-                                <div class="stat-label">FRAME RATE</div>
-                                <div class="stat-value" id="stat-fps">0 FPS</div>
-                            </div>
-                        </div>
-                        <div class="dashboard-terminal">
-                            <div class="terminal-header">LOG READOUT //</div>
-                            <div class="terminal-body" id="terminal-body">
-                                <p class="terminal-line">> System initialized.</p>
-                                <p class="terminal-line">> Canvas dimension loaded: 60x35 grid cells.</p>
-                                <p class="terminal-line">> Ruleset: B3/S23 (Conway's Standard).</p>
-                                <p class="terminal-line">> Awaiting user action or execution command.</p>
-                            </div>
-                        </div>
-                        <div class="rules-block">
-                            <h4>RULES & COMMANDS:</h4>
-                            <ul>
-                                <li>Click &amp; Drag inside the simulation frame to paint new active coordinates.</li>
-                                <li>Cells with <span class="highlight-red">3 neighbors</span> come to life.</li>
-                                <li>Cells with <span class="highlight-yellow">2 or 3 neighbors</span> survive.</li>
-                                <li>All other cells fade into the background.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Work Section -->
-        <section id="work" class="work-section">
-            <div class="container section-container">
-                <div class="section-header">
-                    <span class="section-tag">// MODULE_02</span>
-                    <h2 class="section-title">SELECTED WORKS</h2>
-                    <p class="section-description">
-                        A display of interactive products crafted with clean architecture and extreme visual focus. Hover over cards to feel their physical response.
-                    </p>
-                </div>
-
-                <div class="work-grid" id="work-grid">
-                    <!-- Project Card 1 -->
-                    <div class="project-card" data-project="0">
-                        <div class="project-card-inner">
-                            <div class="project-preview" style="background: linear-gradient(135deg, #FF2A2A 0%, #0A0A0A 100%);">
-                                <div class="project-accent-label">CORE.OS</div>
-                            </div>
-                            <div class="project-card-content">
+                    <!-- Right: Project Cards Stack -->
+                    <div class="project-stack" id="work">
+                        <!-- Project Card 1 -->
+                        <div class="project-card-tilt" data-project="0">
+                            <div class="card-tilt-inner">
                                 <div class="project-meta">WEB APPLICATION // SHELL SYSTEM</div>
                                 <h3 class="project-card-title">Aether Terminal OS</h3>
                                 <p class="project-card-desc">An interactive web-based console interface mapping file management systems, custom scripts, and visual games.</p>
@@ -218,15 +146,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Project Card 2 -->
-                    <div class="project-card" data-project="1">
-                        <div class="project-card-inner">
-                            <div class="project-preview" style="background: linear-gradient(135deg, #0A0A0A 0%, #FFD700 100%);">
-                                <div class="project-accent-label">FINTECH.LEDGER</div>
-                            </div>
-                            <div class="project-card-content">
+                        <!-- Project Card 2 -->
+                        <div class="project-card-tilt" data-project="1">
+                            <div class="card-tilt-inner">
                                 <div class="project-meta">DECENTRALIZED // DATA PIPELINE</div>
                                 <h3 class="project-card-title">Chronos Ledgers</h3>
                                 <p class="project-card-desc">Real-time visualized blockchain analytics pipeline showcasing chain height, pending blocks, and visual transaction fees.</p>
@@ -237,15 +160,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Project Card 3 -->
-                    <div class="project-card" data-project="2">
-                        <div class="project-card-inner">
-                            <div class="project-preview" style="background: linear-gradient(135deg, #FF2A2A 0%, #FFD700 100%);">
-                                <div class="project-accent-label">SYNTH.DSP</div>
-                            </div>
-                            <div class="project-card-content">
+                        <!-- Project Card 3 -->
+                        <div class="project-card-tilt" data-project="2">
+                            <div class="card-tilt-inner">
                                 <div class="project-meta">AUDIO GRAPH // AUDIO DSP</div>
                                 <h3 class="project-card-title">Spectral Audio Sandbox</h3>
                                 <p class="project-card-desc">Advanced audio synthesizer engine utilizing the Web Audio API with real-time dynamic frequency and node layout visualization.</p>

@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollSpy();
     initHeroParticles();
     initScrollAnimations();
-    initLogicLab();
+    initSortingVisualizer();
     initWorkCards();
     initContactForm();
 });
@@ -322,388 +322,213 @@ function initScrollAnimations() {
 /* ==========================================================================
    5. LOGIC LAB (CONWAY'S GAME OF LIFE & CELLULAR AUTOMATA)
    ========================================================================== */
-function initLogicLab() {
-    const canvas = document.getElementById('logic-canvas');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
+function initSortingVisualizer() {
+    const barsContainer = document.getElementById('bars-container');
+    const runBtn = document.getElementById('run-visual-btn');
+    const resetBtn = document.getElementById('reset-visual-btn');
+    const algoSelect = document.getElementById('algo-select');
     
-    // Grid Setup
-    const cols = 60;
-    const rows = 35;
-    let cellSize = 0;
-    let grid = createEmptyGrid();
-    let isRunning = false;
-    let speed = 30; // Generations per second limit
-    let generation = 0;
-    let lastRenderTime = 0;
-    let isDrawing = false;
-    let drawMode = 1; // 1 = paint, 0 = erase
+    if (!barsContainer || !runBtn || !resetBtn) return;
 
-    // Dom controls
-    const playBtn = document.getElementById('sim-play-btn');
-    const stepBtn = document.getElementById('sim-step-btn');
-    const clearBtn = document.getElementById('sim-clear-btn');
-    const presetSelect = document.getElementById('sim-preset-select');
-    const speedSlider = document.getElementById('sim-speed-slider');
-    const statGeneration = document.getElementById('stat-generation');
-    const statCells = document.getElementById('stat-cells');
-    const statFps = document.getElementById('stat-fps');
-    const logContainer = document.getElementById('terminal-body');
+    let array = [];
+    const arraySize = 32;
+    let isSorting = false;
 
-    function createEmptyGrid() {
-        return Array(cols).fill(null).map(() => Array(rows).fill(0));
+    // Helper sleep timer
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function randomizeArray() {
+        if (isSorting) return;
+        array = [];
+        barsContainer.innerHTML = '';
+        for (let i = 0; i < arraySize; i++) {
+            const value = Math.floor(Math.random() * 85) + 12; // heights 12% to 97%
+            array.push(value);
+            
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = `${value}%`;
+            barsContainer.appendChild(bar);
+        }
     }
 
-    function resizeCanvas() {
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        cellSize = canvas.width / cols;
-        drawGrid();
+    randomizeArray();
+
+    // BubbleSort implementation
+    async function bubbleSort() {
+        const bars = document.querySelectorAll('.bar');
+        for (let i = 0; i < array.length - 1; i++) {
+            for (let j = 0; j < array.length - i - 1; j++) {
+                if (!isSorting) return;
+
+                bars[j].style.backgroundColor = 'var(--color-red)';
+                bars[j+1].style.backgroundColor = 'var(--color-red)';
+                await sleep(40);
+
+                if (array[j] > array[j+1]) {
+                    const temp = array[j];
+                    array[j] = array[j+1];
+                    array[j+1] = temp;
+
+                    bars[j].style.height = `${array[j]}%`;
+                    bars[j+1].style.height = `${array[j+1]}%`;
+
+                    bars[j].style.backgroundColor = 'var(--color-yellow)';
+                    bars[j+1].style.backgroundColor = 'var(--color-yellow)';
+                    await sleep(40);
+                }
+
+                bars[j].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+                bars[j+1].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+            }
+            bars[array.length - i - 1].style.backgroundColor = 'var(--color-yellow)';
+        }
+        bars[0].style.backgroundColor = 'var(--color-yellow)';
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
 
-    // Initial fill
-    loadPreset('random');
+    // QuickSort helper methods
+    async function runQuickSort(left, right) {
+        if (left >= right) return;
+        let pivotIdx = await partition(left, right);
+        await runQuickSort(left, pivotIdx - 1);
+        await runQuickSort(pivotIdx + 1, right);
+    }
 
-    // Terminal Logging Helper
-    function appendTerminalLog(msg) {
-        if (!logContainer) return;
-        const line = document.createElement('p');
-        line.className = 'terminal-line';
-        line.textContent = `> ${msg}`;
-        logContainer.appendChild(line);
-        logContainer.scrollTop = logContainer.scrollHeight;
+    async function partition(left, right) {
+        const bars = document.querySelectorAll('.bar');
+        const pivotValue = array[right];
+        bars[right].style.backgroundColor = 'var(--color-yellow)'; // pivot
         
-        // Cap terminal log children at 20 rows to avoid DOM bloating
-        while (logContainer.children.length > 20) {
-            logContainer.removeChild(logContainer.firstChild);
-        }
-    }
+        let i = left;
+        for (let j = left; j < right; j++) {
+            if (!isSorting) return;
 
-    function countActiveCells(g) {
-        let count = 0;
-        for (let x = 0; x < cols; x++) {
-            for (let y = 0; y < rows; y++) {
-                if (g[x][y] === 1) count++;
+            bars[j].style.backgroundColor = 'var(--color-red)';
+            bars[i].style.backgroundColor = 'var(--color-red)';
+            await sleep(60);
+
+            if (array[j] < pivotValue) {
+                const temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+
+                bars[i].style.height = `${array[i]}%`;
+                bars[j].style.height = `${array[j]}%`;
+
+                bars[i].style.backgroundColor = 'var(--color-yellow)';
+                bars[j].style.backgroundColor = 'var(--color-yellow)';
+                await sleep(60);
+
+                bars[i].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+                i++;
             }
+            bars[j].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
         }
-        return count;
+
+        const temp = array[i];
+        array[i] = array[right];
+        array[right] = temp;
+
+        bars[i].style.height = `${array[i]}%`;
+        bars[right].style.height = `${array[right]}%`;
+
+        bars[i].style.backgroundColor = 'var(--color-yellow)';
+        bars[right].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+        await sleep(60);
+
+        bars[i].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+        return i;
     }
 
-    function drawGrid() {
-        ctx.fillStyle = '#050505';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Draw Grid Lines
-        ctx.strokeStyle = '#111115';
-        ctx.lineWidth = 1;
-        for (let x = 0; x <= cols; x++) {
-            ctx.beginPath();
-            ctx.moveTo(x * cellSize, 0);
-            ctx.lineTo(x * cellSize, canvas.height);
-            ctx.stroke();
-        }
-        for (let y = 0; y <= rows; y++) {
-            ctx.beginPath();
-            ctx.moveTo(0, y * cellSize);
-            ctx.lineTo(canvas.width, y * cellSize);
-            ctx.stroke();
-        }
-
-        // Draw Cells
-        for (let x = 0; x < cols; x++) {
-            for (let y = 0; y < rows; y++) {
-                if (grid[x][y] === 1) {
-                    // Cell style: Gradient of Red & Yellow accents
-                    ctx.fillStyle = (x + y) % 2 === 0 ? 'var(--color-red)' : 'var(--color-yellow)';
-                    ctx.fillRect(
-                        x * cellSize + 1.5,
-                        y * cellSize + 1.5,
-                        cellSize - 2,
-                        cellSize - 2
-                    );
-                    
-                    // Subtle glowing border around active cells
-                    ctx.strokeStyle = 'rgba(255, 42, 42, 0.4)';
-                    ctx.lineWidth = 0.5;
-                    ctx.strokeRect(
-                        x * cellSize + 0.5,
-                        y * cellSize + 0.5,
-                        cellSize - 1,
-                        cellSize - 1
-                    );
-                }
-            }
-        }
-
-        // Update statistics displays
-        if (statGeneration) statGeneration.textContent = generation;
-        if (statCells) statCells.textContent = countActiveCells(grid);
+    // MergeSort helper methods
+    async function runMergeSort(start, end) {
+        if (start >= end) return;
+        const mid = Math.floor((start + end) / 2);
+        await runMergeSort(start, mid);
+        await runMergeSort(mid + 1, end);
+        await merge(start, mid, end);
     }
 
-    // Next Generation State Resolver
-    function computeNextGeneration() {
-        let next = createEmptyGrid();
+    async function merge(start, mid, end) {
+        const bars = document.querySelectorAll('.bar');
+        const temp = [];
+        let i = start, j = mid + 1;
 
-        for (let x = 0; x < cols; x++) {
-            for (let y = 0; y < rows; y++) {
-                let neighbors = countNeighbors(x, y);
-                let state = grid[x][y];
+        while (i <= mid && j <= end) {
+            if (!isSorting) return;
+            bars[i].style.backgroundColor = 'var(--color-red)';
+            bars[j].style.backgroundColor = 'var(--color-red)';
+            await sleep(50);
 
-                if (state === 0 && neighbors === 3) {
-                    next[x][y] = 1; // Born
-                } else if (state === 1 && (neighbors < 2 || neighbors > 3)) {
-                    next[x][y] = 0; // Death by under/overpopulation
-                } else {
-                    next[x][y] = state; // Survival
-                }
+            if (array[i] <= array[j]) {
+                temp.push(array[i++]);
+            } else {
+                temp.push(array[j++]);
             }
         }
 
-        grid = next;
-        generation++;
-    }
-
-    function countNeighbors(x, y) {
-        let sum = 0;
-        for (let i = -1; i < 2; i++) {
-            for (let j = -1; j < 2; j++) {
-                if (i === 0 && j === 0) continue;
-                
-                // Wrap around logic (Toroidal grid structure)
-                let c = (x + i + cols) % cols;
-                let r = (y + j + rows) % rows;
-                sum += grid[c][r];
-            }
+        while (i <= mid) {
+            if (!isSorting) return;
+            temp.push(array[i++]);
         }
-        return sum;
+        while (j <= end) {
+            if (!isSorting) return;
+            temp.push(array[j++]);
+        }
+
+        for (let k = 0; k < temp.length; k++) {
+            if (!isSorting) return;
+            array[start + k] = temp[k];
+            bars[start + k].style.height = `${array[start + k]}%`;
+            bars[start + k].style.backgroundColor = 'var(--color-yellow)';
+            await sleep(50);
+            bars[start + k].style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
+        }
     }
 
-    // Presets catalog
-    function loadPreset(presetName) {
-        grid = createEmptyGrid();
-        generation = 0;
+    // Run trigger handler
+    runBtn.addEventListener('click', async () => {
+        if (isSorting) return;
+        isSorting = true;
+        
+        runBtn.disabled = true;
+        resetBtn.disabled = true;
+        algoSelect.disabled = true;
+        runBtn.classList.remove('btn-slide-up');
+        runBtn.style.opacity = '0.5';
 
-        if (presetName === 'random') {
-            for (let x = 0; x < cols; x++) {
-                for (let y = 0; y < rows; y++) {
-                    grid[x][y] = Math.random() > 0.85 ? 1 : 0;
-                }
-            }
-            appendTerminalLog('Presets loaded: Random cellular distribution.');
-        } 
-        else if (presetName === 'glider') {
-            // Glider template
-            const cx = 5, cy = 5;
-            grid[cx][cy] = 1;
-            grid[cx+1][cy+1] = 1;
-            grid[cx+2][cy-1] = 1;
-            grid[cx+2][cy] = 1;
-            grid[cx+2][cy+1] = 1;
-            appendTerminalLog('Presets loaded: Standard kinetic glider pattern.');
-        } 
-        else if (presetName === 'gosper') {
-            // Gosper Glider Gun template
-            const gun = [
-                [1, 5], [1, 6], [2, 5], [2, 6],
-                [11, 5], [11, 6], [11, 7], [12, 4], [12, 8], [13, 3], [13, 9], [14, 3], [14, 9],
-                [15, 6], [16, 4], [16, 8], [17, 5], [17, 6], [17, 7], [18, 6],
-                [21, 3], [21, 4], [21, 5], [22, 3], [22, 4], [22, 5], [23, 2], [23, 6],
-                [25, 1], [25, 2], [25, 6], [25, 7],
-                [35, 3], [35, 4], [36, 3], [36, 4]
-            ];
-            gun.forEach(([x, y]) => {
-                if (x + 2 < cols && y + 5 < rows) {
-                    grid[x + 2][y + 5] = 1;
-                }
+        const algorithm = algoSelect.value;
+        if (algorithm === 'quicksort') {
+            await runQuickSort(0, array.length - 1);
+        } else if (algorithm === 'mergesort') {
+            await runMergeSort(0, array.length - 1);
+        } else if (algorithm === 'bubblesort') {
+            await bubbleSort();
+        }
+
+        // Green finish flash visually indicating completion
+        if (isSorting) {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                bar.style.backgroundColor = '#27c93f'; // systems green
             });
-            appendTerminalLog('Presets loaded: Gosper glider gun (Infinite Stream).');
-        } 
-        else if (presetName === 'pulsar') {
-            // Pulsar Period 3 oscillator template
-            const cx = Math.floor(cols / 2);
-            const cy = Math.floor(rows / 2);
-            const offsets = [
-                // Top outer row
-                [-6, -2], [-6, -3], [-6, -4], [6, -2], [6, -3], [6, -4],
-                [-1, -2], [-1, -3], [-1, -4], [1, -2], [1, -3], [1, -4],
-                // Bottom outer row
-                [-6, 2], [-6, 3], [-6, 4], [6, 2], [6, 3], [6, 4],
-                [-1, 2], [-1, 3], [-1, 4], [1, 2], [1, 3], [1, 4],
-                // Left & Right columns
-                [-2, -6], [-3, -6], [-4, -6], [2, -6], [3, -6], [4, -6],
-                [-2, 6], [-3, 6], [-4, 6], [2, 6], [3, 6], [4, 6],
-                [-2, -1], [-3, -1], [-4, -1], [2, -1], [3, -1], [4, -1],
-                [-2, 1], [-3, 1], [-4, 1], [2, 1], [3, 1], [4, 1]
-            ];
-            offsets.forEach(([dx, dy]) => {
-                if (cx + dx >= 0 && cx + dx < cols && cy + dy >= 0 && cy + dy < rows) {
-                    grid[cx + dx][cy + dy] = 1;
-                }
+            await sleep(800);
+            bars.forEach(bar => {
+                bar.style.backgroundColor = 'rgba(248, 249, 250, 0.3)';
             });
-            appendTerminalLog('Presets loaded: Pulsar Oscillator (Period 3).');
-        }
-        else if (presetName === 'pentadecathlon') {
-            const cx = Math.floor(cols / 2);
-            const cy = Math.floor(rows / 2);
-            // Horizontal row of 10 cells
-            for(let i = -4; i <= 5; i++) {
-                grid[cx + i][cy] = 1;
-            }
-            appendTerminalLog('Presets loaded: Pentadecathlon Oscillator (Period 15).');
         }
 
-        drawGrid();
-    }
-
-    // Drawing coordinates resolver
-    function handleDrawEvent(e) {
-        const rect = canvas.getBoundingClientRect();
-        const clientX = e.clientX || e.touches[0].clientX;
-        const clientY = e.clientY || e.touches[0].clientY;
-        
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        
-        const x = (clientX - rect.left) * scaleX;
-        const y = (clientY - rect.top) * scaleY;
-        
-        const cellX = Math.floor(x / cellSize);
-        const cellY = Math.floor(y / cellSize);
-
-        if (cellX >= 0 && cellX < cols && cellY >= 0 && cellY < rows) {
-            grid[cellX][cellY] = drawMode;
-            drawGrid();
-        }
-    }
-
-    // Interactivity Listeners
-    canvas.addEventListener('mousedown', (e) => {
-        isDrawing = true;
-        const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const x = (e.clientX - rect.left) * scaleX;
-        const y = (e.clientY - rect.top) * scaleY;
-        const cellX = Math.floor(x / cellSize);
-        const cellY = Math.floor(y / cellSize);
-        
-        if (cellX >= 0 && cellX < cols && cellY >= 0 && cellY < rows) {
-            // Ee if clicked active or empty to decide paint/erase
-            drawMode = grid[cellX][cellY] === 1 ? 0 : 1;
-            grid[cellX][cellY] = drawMode;
-            drawGrid();
-        }
+        isSorting = false;
+        runBtn.disabled = false;
+        resetBtn.disabled = false;
+        algoSelect.disabled = false;
+        runBtn.classList.add('btn-slide-up');
+        runBtn.style.opacity = '1';
     });
 
-    window.addEventListener('mouseup', () => {
-        isDrawing = false;
+    resetBtn.addEventListener('click', () => {
+        randomizeArray();
     });
-
-    canvas.addEventListener('mousemove', (e) => {
-        if (isDrawing) {
-            handleDrawEvent(e);
-        }
-    });
-
-    // Touch Event mapping for mobile
-    canvas.addEventListener('touchstart', (e) => {
-        isDrawing = true;
-        handleDrawEvent(e);
-    });
-
-    canvas.addEventListener('touchend', () => {
-        isDrawing = false;
-    });
-
-    canvas.addEventListener('touchmove', (e) => {
-        if (isDrawing) {
-            e.preventDefault();
-            handleDrawEvent(e);
-        }
-    });
-
-    // Button actions listeners
-    playBtn.addEventListener('click', () => {
-        isRunning = !isRunning;
-        if (isRunning) {
-            playBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                </svg>
-            `;
-            appendTerminalLog('Simulation loop execution: RUNNING.');
-        } else {
-            playBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z"/>
-                </svg>
-            `;
-            appendTerminalLog('Simulation loop execution: STOPPED.');
-        }
-    });
-
-    stepBtn.addEventListener('click', () => {
-        if (!isRunning) {
-            computeNextGeneration();
-            drawGrid();
-            appendTerminalLog(`Manual step triggered. Generation: ${generation}`);
-        }
-    });
-
-    clearBtn.addEventListener('click', () => {
-        isRunning = false;
-        playBtn.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z"/>
-            </svg>
-        `;
-        grid = createEmptyGrid();
-        generation = 0;
-        drawGrid();
-        appendTerminalLog('System cleared. Grid cells reset.');
-    });
-
-    presetSelect.addEventListener('change', (e) => {
-        loadPreset(e.target.value);
-    });
-
-    speedSlider.addEventListener('input', (e) => {
-        speed = parseInt(e.target.value);
-        appendTerminalLog(`Speed updated: Limit set to ${speed} GPS (Generations Per Second).`);
-    });
-
-    // FPS / Render loops
-    let lastTime = performance.now();
-    let frameCount = 0;
-    let fps = 0;
-
-    function gameLoop(time) {
-        requestAnimationFrame(gameLoop);
-
-        // Frame counter
-        frameCount++;
-        if (time >= lastTime + 1000) {
-            fps = Math.round((frameCount * 1000) / (time - lastTime));
-            if (statFps) statFps.textContent = `${fps} FPS`;
-            frameCount = 0;
-            lastTime = time;
-        }
-
-        // Sim speed controller interval calculation
-        if (isRunning) {
-            const timeBetweenFrames = 1000 / speed;
-            if (time - lastRenderTime >= timeBetweenFrames) {
-                computeNextGeneration();
-                drawGrid();
-                lastRenderTime = time;
-            }
-        }
-    }
-    requestAnimationFrame(gameLoop);
 }
 
 /* ==========================================================================
@@ -738,7 +563,7 @@ const PROJECTS_DATA = [
 ];
 
 function initWorkCards() {
-    const cards = document.querySelectorAll('.project-card');
+    const cards = document.querySelectorAll('.project-card-tilt');
     const modal = document.getElementById('project-modal');
     const backdrop = document.getElementById('modal-backdrop');
     const closeBtn = document.getElementById('modal-close');
@@ -755,7 +580,7 @@ function initWorkCards() {
 
     // 3D Tilt Card Motion Controller
     cards.forEach(card => {
-        const inner = card.querySelector('.project-card-inner');
+        const inner = card.querySelector('.card-tilt-inner');
         
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
