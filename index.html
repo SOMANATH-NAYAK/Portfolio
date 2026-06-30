@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Somanath Nayak - Creative Developer & Frontend Architect Portfolio. Custom-built high-contrast visual interface with interactive logic simulations, premium animations, and projects.">
+    <title>Somanath Nayak | Creative Developer & Frontend Architect</title>
+    
+    <!-- Google Fonts: Space Grotesk for Headings & Inter for Body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+
+    <!-- Navigation Header -->
+    <header class="main-header" id="main-header">
+        <div class="header-container">
+            <a href="#home" class="brand-logo" id="brand-logo">
+                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="12" fill="#0A0A0A"/>
+                    <path d="M25 75V25H50C63.8071 25 75 36.1929 75 50C75 63.8071 63.8071 75 50 75H25Z" stroke="#FF2A2A" stroke-width="8" stroke-linejoin="round"/>
+                    <path d="M25 50H75" stroke="#FFD700" stroke-width="6"/>
+                </svg>
+                <span class="brand-text">SOMANATH<span class="highlight-yellow">.</span>N</span>
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active" id="nav-link-home">Home</a></li>
+                    <li><a href="#logic" class="nav-link" id="nav-link-logic">Logic</a></li>
+                    <li><a href="#work" class="nav-link" id="nav-link-work">Work</a></li>
+                    <li><a href="#connect" class="nav-link" id="nav-link-connect">Connect</a></li>
+                </ul>
+            </nav>
+
+            <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Navigation Menu">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home / Hero Section -->
+        <section id="home" class="hero-section">
+            <canvas class="hero-canvas" id="hero-canvas"></canvas>
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="hero-tagline reveal-item">DESIGNING FUTURES // EXECUTING LOGIC</div>
+                    <h1 class="hero-title reveal-item">
+                        CRAFTING <br class="mobile-break">
+                        <span class="highlight-outline">INTERACTIVE</span> <br>
+                        <span class="highlight-red">CODE</span> &amp; <span class="highlight-yellow">EXPERIENCES</span>
+                    </h1>
+                    <p class="hero-subtitle reveal-item">
+                        I am a Creative Developer specialized in developing highly performant, visually premium, and interaction-driven digital products using clean engineering models.
+                    </p>
+                    <div class="hero-actions reveal-item">
+                        <a href="#logic" class="btn btn-primary" id="cta-logic-btn">Enter Labs</a>
+                        <a href="#work" class="btn btn-secondary" id="cta-work-btn">View Creations</a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator" id="scroll-indicator">
+                <span class="scroll-text">SCROLL TO SYSTEM</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- Logic Section -->
+        <section id="logic" class="logic-section">
+            <div class="container section-container">
+                <div class="section-header">
+                    <span class="section-tag">// MODULE_01</span>
+                    <h2 class="section-title">THE LOGIC LAB</h2>
+                    <p class="section-description">
+                        An interactive implementation of Conway's Game of Life. Simple algorithmic rules generating complex emergent visual states. Draw custom structures or select from architectural templates.
+                    </p>
+                </div>
+
+                <div class="logic-grid">
+                    <!-- Simulation Sandbox Area -->
+                    <div class="simulation-card">
+                        <div class="card-header-bar">
+                            <div class="window-dot red-dot"></div>
+                            <div class="window-dot yellow-dot"></div>
+                            <div class="window-dot green-dot"></div>
+                            <span class="window-title">cellular_automata.sys</span>
+                        </div>
+                        <div class="canvas-wrapper">
+                            <canvas id="logic-canvas"></canvas>
+                        </div>
+                        <div class="simulation-controls">
+                            <button id="sim-play-btn" class="ctrl-btn" aria-label="Play/Pause Simulation">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </button>
+                            <button id="sim-step-btn" class="ctrl-btn" title="Step One Generation" aria-label="Step One Generation">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                                </svg>
+                            </button>
+                            <button id="sim-clear-btn" class="ctrl-btn text-btn">Clear</button>
+                            
+                            <div class="control-group">
+                                <label for="sim-preset-select">Preset</label>
+                                <select id="sim-preset-select" class="ctrl-select">
+                                    <option value="random">Random Noise</option>
+                                    <option value="gosper">Gosper Glider Gun</option>
+                                    <option value="pulsar">The Pulsar (Period 3)</option>
+                                    <option value="glider">Glider Stream</option>
+                                    <option value="pentadecathlon">Pentadecathlon</option>
+                                </select>
+                            </div>
+
+                            <div class="control-group slider-group">
+                                <label for="sim-speed-slider">Speed</label>
+                                <input type="range" id="sim-speed-slider" min="1" max="60" value="30" class="ctrl-slider">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Readout / Dashboard Panel -->
+                    <div class="dashboard-card">
+                        <div class="dashboard-status-header">
+                            <span class="status-indicator-light blinking"></span>
+                            <span class="status-text">SYSTEM ACTIVE</span>
+                        </div>
+                        <div class="stats-panel">
+                            <div class="stat-box">
+                                <div class="stat-label">GENERATION</div>
+                                <div class="stat-value" id="stat-generation">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">ACTIVE CELLS</div>
+                                <div class="stat-value" id="stat-cells">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">FRAME RATE</div>
+                                <div class="stat-value" id="stat-fps">0 FPS</div>
+                            </div>
+                        </div>
+                        <div class="dashboard-terminal">
+                            <div class="terminal-header">LOG READOUT //</div>
+                            <div class="terminal-body" id="terminal-body">
+                                <p class="terminal-line">> System initialized.</p>
+                                <p class="terminal-line">> Canvas dimension loaded: 60x35 grid cells.</p>
+                                <p class="terminal-line">> Ruleset: B3/S23 (Conway's Standard).</p>
+                                <p class="terminal-line">> Awaiting user action or execution command.</p>
+                            </div>
+                        </div>
+                        <div class="rules-block">
+                            <h4>RULES & COMMANDS:</h4>
+                            <ul>
+                                <li>Click &amp; Drag inside the simulation frame to paint new active coordinates.</li>
+                                <li>Cells with <span class="highlight-red">3 neighbors</span> come to life.</li>
+                                <li>Cells with <span class="highlight-yellow">2 or 3 neighbors</span> survive.</li>
+                                <li>All other cells fade into the background.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Section -->
+        <section id="work" class="work-section">
+            <div class="container section-container">
+                <div class="section-header">
+                    <span class="section-tag">// MODULE_02</span>
+                    <h2 class="section-title">SELECTED WORKS</h2>
+                    <p class="section-description">
+                        A display of interactive products crafted with clean architecture and extreme visual focus. Hover over cards to feel their physical response.
+                    </p>
+                </div>
+
+                <div class="work-grid" id="work-grid">
+                    <!-- Project Card 1 -->
+                    <div class="project-card" data-project="0">
+                        <div class="project-card-inner">
+                            <div class="project-preview" style="background: linear-gradient(135deg, #FF2A2A 0%, #0A0A0A 100%);">
+                                <div class="project-accent-label">CORE.OS</div>
+                            </div>
+                            <div class="project-card-content">
+                                <div class="project-meta">WEB APPLICATION // SHELL SYSTEM</div>
+                                <h3 class="project-card-title">Aether Terminal OS</h3>
+                                <p class="project-card-desc">An interactive web-based console interface mapping file management systems, custom scripts, and visual games.</p>
+                                <div class="project-tags">
+                                    <span>Vanilla JS</span>
+                                    <span>Canvas API</span>
+                                    <span>CSS Variables</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2 -->
+                    <div class="project-card" data-project="1">
+                        <div class="project-card-inner">
+                            <div class="project-preview" style="background: linear-gradient(135deg, #0A0A0A 0%, #FFD700 100%);">
+                                <div class="project-accent-label">FINTECH.LEDGER</div>
+                            </div>
+                            <div class="project-card-content">
+                                <div class="project-meta">DECENTRALIZED // DATA PIPELINE</div>
+                                <h3 class="project-card-title">Chronos Ledgers</h3>
+                                <p class="project-card-desc">Real-time visualized blockchain analytics pipeline showcasing chain height, pending blocks, and visual transaction fees.</p>
+                                <div class="project-tags">
+                                    <span>SVG Architecture</span>
+                                    <span>WebSockets</span>
+                                    <span>Flex Grid</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 3 -->
+                    <div class="project-card" data-project="2">
+                        <div class="project-card-inner">
+                            <div class="project-preview" style="background: linear-gradient(135deg, #FF2A2A 0%, #FFD700 100%);">
+                                <div class="project-accent-label">SYNTH.DSP</div>
+                            </div>
+                            <div class="project-card-content">
+                                <div class="project-meta">AUDIO GRAPH // AUDIO DSP</div>
+                                <h3 class="project-card-title">Spectral Audio Sandbox</h3>
+                                <p class="project-card-desc">Advanced audio synthesizer engine utilizing the Web Audio API with real-time dynamic frequency and node layout visualization.</p>
+                                <div class="project-tags">
+                                    <span>Web Audio API</span>
+                                    <span>Canvas Render</span>
+                                    <span>Responsive Flex</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connect Section -->
+        <section id="connect" class="connect-section">
+            <div class="container section-container">
+                <div class="section-header">
+                    <span class="section-tag">// MODULE_03</span>
+                    <h2 class="section-title">CONNECT SYSTEM</h2>
+                    <p class="section-description">
+                        Initiate communication vectors. If you want to build high-performance products, trigger the submission form or contact me through social gateways.
+                    </p>
+                </div>
+
+                <div class="connect-grid">
+                    <!-- Form Card -->
+                    <div class="connect-form-card">
+                        <form id="contact-form" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="contact-name" name="name" required placeholder=" ">
+                                    <label for="contact-name">IDENTIFIER / NAME</label>
+                                    <span class="error-msg" id="name-error">Identifier is required.</span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="contact-email" name="email" required placeholder=" ">
+                                    <label for="contact-email">EMAIL ADDRESS</label>
+                                    <span class="error-msg" id="email-error">Enter a valid communication email.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="contact-subject" name="subject" required placeholder=" ">
+                                    <label for="contact-subject">COMMUNICATION TOPIC</label>
+                                    <span class="error-msg" id="subject-error">Topic is required.</span>
+                            </div>
+                            <div class="form-group">
+                                <textarea id="contact-message" name="message" required placeholder=" " rows="5"></textarea>
+                                <label for="contact-message">TRANSMISSION CONTENT</label>
+                                <span class="error-msg" id="message-error">Transmission content cannot be blank.</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" id="form-submit-btn">Send Transmission</button>
+                        </form>
+                    </div>
+
+                    <!-- Social / Connect Details -->
+                    <div class="connect-details-card">
+                        <div class="terminal-header">SOCIAL VECTOR CHANNELS //</div>
+                        <div class="social-channels">
+                            <a href="https://github.com/SOMANATH-NAYAK" target="_blank" rel="noopener noreferrer" class="social-link-item magnetic" id="soc-github">
+                                <div class="icon-circle">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.164 22 16.418 22 12c0-5.523-4.478-10-10-10z" />
+                                    </svg>
+                                </div>
+                                <div class="link-label">
+                                    <span class="label-heading">GITHUB</span>
+                                    <span class="label-sub">@SOMANATH-NAYAK</span>
+                                </div>
+                            </a>
+                            <a href="#" class="social-link-item magnetic" id="soc-linkedin">
+                                <div class="icon-circle">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                    </svg>
+                                </div>
+                                <div class="link-label">
+                                    <span class="label-heading">LINKEDIN</span>
+                                    <span class="label-sub">Somanath Nayak</span>
+                                </div>
+                            </a>
+                            <a href="#" class="social-link-item magnetic" id="soc-email">
+                                <div class="icon-circle">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                </div>
+                                <div class="link-label">
+                                    <span class="label-heading">SECURE EMAIL</span>
+                                    <span class="label-sub">somanath.dev@sys.net</span>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Mini dynamic clock -->
+                        <div class="system-time-block">
+                            <span class="block-title">LOC_COORDINATES // BHUBANESWAR, IN</span>
+                            <span class="block-time" id="system-time">00:00:00 UTC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Custom Project Detail Modal -->
+    <div class="project-modal" id="project-modal">
+        <div class="modal-backdrop" id="modal-backdrop"></div>
+        <div class="modal-container">
+            <button class="modal-close" id="modal-close" aria-label="Close details window">&times;</button>
+            <div class="modal-grid">
+                <div class="modal-visual" id="modal-visual">
+                    <!-- Project Specific visual, e.g. SVG or Canvas overlay loaded dynamically -->
+                </div>
+                <div class="modal-info">
+                    <span class="modal-tag" id="modal-project-meta">METADATA</span>
+                    <h3 class="modal-title" id="modal-project-title">Project Name</h3>
+                    <p class="modal-desc" id="modal-project-desc">Detailed project description goes here.</p>
+                    
+                    <div class="modal-tech-stack">
+                        <h4>TECHNOLOGY STACK</h4>
+                        <div class="tech-tags" id="modal-project-tags">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="modal-project-link">Access Production</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast System -->
+    <div class="toast" id="system-toast">
+        <span class="toast-indicator"></span>
+        <span class="toast-message" id="toast-message">Notification Message</span>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <p>&copy; 2026 SOMANATH NAYAK. STACK: HTML5 / CSS3 / ES6. ALL RIGHTS RESERVED.</p>
+            <p>DESIGNED FOR VIBRANT MONOCHROME SYSTEM-V</p>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript Logic -->
+    <script src="main.js"></script>
+</body>
+</html>
