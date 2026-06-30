@@ -531,10 +531,98 @@ body:active .custom-cursor {
     100% { transform: translateY(333%); }
 }
 
-@keyframes pulse {
-    0% { opacity: 0.4; }
-    100% { opacity: 0.8; }
+/* Scroll-triggered reveal animations */
+.hidden {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, opacity;
 }
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   ABOUT / PHILOSOPHY SECTION
+   ========================================================================== */
+
+.about-section {
+    position: relative;
+    background-color: var(--color-bg);
+    padding-top: 120px;
+    padding-bottom: 120px;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.about-tagline {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-yellow);
+    letter-spacing: 0.15em;
+}
+
+.about-title {
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-text-primary);
+    max-width: 900px;
+}
+
+.about-philosophy-block {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 800px;
+    margin-top: 24px;
+}
+
+.about-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+}
+
+/* Parallax Background Shape */
+.parallax-shape {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 50%;
+    z-index: 1;
+    will-change: transform;
+}
+
+.shape-red {
+    top: 15%;
+    right: -100px;
+    width: 450px;
+    height: 450px;
+    background-color: var(--color-red);
+    filter: blur(150px);
+    opacity: 0.12;
+    transform: translateY(calc(var(--scroll-y, 0) * 0.2px));
+}
+
+/* Stagger delays inside About section */
+.about-section .about-tagline.show { transition-delay: 0.05s; }
+.about-section .about-title.show { transition-delay: 0.15s; }
+.about-section .about-philosophy-block p:nth-child(1).show { transition-delay: 0.25s; }
+.about-section .about-philosophy-block p:nth-child(2).show { transition-delay: 0.35s; }
+.about-section .about-philosophy-block p:nth-child(3).show { transition-delay: 0.45s; }
 
 /* ==========================================================================
    LOGIC LAB - CELLS SIMULATOR

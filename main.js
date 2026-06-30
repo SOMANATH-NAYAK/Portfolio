@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initScrollSpy();
     initHeroParticles();
+    initScrollAnimations();
     initLogicLab();
     initWorkCards();
     initContactForm();
@@ -284,6 +285,38 @@ function initHeroParticles() {
         requestAnimationFrame(animate);
     }
     animate();
+}
+
+/* ==========================================================================
+   4.2 SCROLL TRIGGERED REVEALS & PARALLAX
+   ========================================================================== */
+function initScrollAnimations() {
+    // Parallax scroll listener
+    window.addEventListener('scroll', () => {
+        document.documentElement.style.setProperty('--scroll-y', window.scrollY);
+    });
+    // Set initial value
+    document.documentElement.style.setProperty('--scroll-y', window.scrollY);
+
+    // Intersection Observer for scroll-triggered reveal
+    const hiddenElements = document.querySelectorAll('.hidden');
+    
+    const observerOptions = {
+        root: null, // viewport
+        threshold: 0.1, // trigger when 10% is visible
+        rootMargin: '0px 0px -50px 0px' // offset bottom triggers slightly
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                observer.unobserve(entry.target); // Reveal animation occurs once
+            }
+        });
+    }, observerOptions);
+
+    hiddenElements.forEach(el => observer.observe(el));
 }
 
 /* ==========================================================================
