@@ -67,17 +67,13 @@ function initCustomCursor() {
     animateCursor();
 
     // Hover scale effects on interactive elements
-    const hoverables = document.querySelectorAll('a, button, select, input, textarea, .project-card, .ctrl-btn');
+    const hoverables = document.querySelectorAll('a, button, select, input, textarea, .project-card-tilt, .ctrl-btn, .footer-social-link');
     hoverables.forEach(el => {
         el.addEventListener('mouseenter', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1.8)';
-            cursor.style.borderColor = 'var(--color-yellow)';
-            cursor.style.backgroundColor = 'rgba(255, 215, 0, 0.05)';
+            cursor.classList.add('hovered');
         });
         el.addEventListener('mouseleave', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-            cursor.style.borderColor = 'var(--color-red)';
-            cursor.style.backgroundColor = 'transparent';
+            cursor.classList.remove('hovered');
         });
     });
 }
